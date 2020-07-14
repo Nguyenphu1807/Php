@@ -94,11 +94,11 @@ Route::get('/update',function (){
 });
 
 
-//Route::get('/search',function (){
-//    // 4. Tìm sản phẩm: theo id
-//    $result = DB::select('select * from test where id LIKE 2' );
-//      return $result;
-//});
+Route::get('/search',function (){
+    // 4. Tìm sản phẩm: theo id
+    $result = DB::select('select * from test where id LIKE 2' );
+      return $result;
+});
 Route::get('/search',function (){
     // 4. Tìm sản phẩm: theo tên
     $result = DB::select('select * from test where name LIKE '%Dell%'');
