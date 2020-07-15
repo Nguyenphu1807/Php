@@ -1,5 +1,7 @@
 <?php
 
+use App\Task;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,10 +15,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+//Route::get('/', function () {
+//    return view('welcome');
 //    return 'Welcome to laravel by Nguyen Trieu Phu';
-});
+//});
 
 Route::get('home','HomeController@showWelcome');
 Route::get('about','AboutController@showdetail');
@@ -64,15 +66,14 @@ Route::get('where',function (){
 
    Route::get('/read',function (){
       // 1. Danh sách sản phẩm: tên, giá, hình ảnh
-       $result = DB::select('select * from test where id = ?',[1]);
-//      return $result;
-       foreach ($result as $post){
-           return $post->name;
+       $result = DB::select('select * from test');
+      return $result;
+//       foreach ($result as $post){
+//           return $post->name;
 //           return $post->price;
 //           return $post->img;
-       }
+//       }
    });
-
 
 
 Route::get('/insert',function (){
@@ -82,7 +83,6 @@ Route::get('/insert',function (){
     DB::insert('insert into test(id,name,price,img) values(?,?,?,?)',['3','Dell pro','53.000.000','https://compumax.com.vn/laptop/dell-xps-13-7390-i5-10210u-8gb-256ss-13.3fhd-w10-finger-silver.html?gclid=EAIaIQobChMIuLDst8zM6gIV-NVMAh1cTgPbEAQYAiABEgLGEPD_BwE']);
     return 'DONE';
 });
-
 
 
 
@@ -99,6 +99,7 @@ Route::get('/search',function (){
     $result = DB::select('select * from test where id LIKE 2' );
       return $result;
 });
+
 Route::get('/search',function (){
     // 4. Tìm sản phẩm: theo tên
     $result = DB::select('select * from test where name LIKE '%Dell%'');
@@ -110,4 +111,32 @@ Route::get('/delete',function (){
     // 5 . xóa sản phẩm theo id sản phẩm
     $delete = DB::delete('delete from test where id = ?',[3]);
     return $delete;
+});
+
+
+
+Route::get('/',function (){
+    return view('tasks');
+});
+
+Route::post('/tasks',function (Request $request){
+    $validator = Validator::make($request->all(), [
+        'name' => 'required|max:255',
+    ]);
+    if($validator->fails())
+    {
+        return redirect('/')
+            ->withInput()
+            ->withErrors($validator);
+    }
+
+    $task = new Task;
+    $task->name = $request->name;
+    $task->save();
+
+    return redirect('/');
+});
+
+Route::delete('/task/{task}',function (Task $task){
+
 });

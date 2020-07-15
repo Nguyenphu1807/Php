@@ -9,7 +9,6 @@ class ProductController extends BaseController
 {
     public function showProduct(){
         return view('product');
-
     }
 
 }
